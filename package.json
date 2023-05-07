@@ -1,6 +1,6 @@
 {
 	"name": "@splitscript.js/core",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Core SplitScript.js library",
 	"types": "./dist/types/index.d.ts",
 	"exports": {
