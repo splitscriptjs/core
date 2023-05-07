@@ -3,7 +3,9 @@
 ![](https://i.imgur.com/hffRwE2.png)
 
 </a>
+
 <center>
+
 Core Splitscript.js library with event emitter and a CLI
 
 <a href='https://www.npmjs.com/package/@splitscript.js/core'>
@@ -17,9 +19,10 @@ Core Splitscript.js library with event emitter and a CLI
 
 <a href='https://splitscript.js.org' style='text-decoration:none;'>
      <div style='display:flex;align-items:center;justify-content:center;font-size:40px;color:rgb(144, 144, 238);'>
-     <img src='https://i.imgur.com/AdvvCYb.png' alt='docs' height='100px' style='padding-right:10px;'>
-     Docs
+          <img src='https://i.imgur.com/AdvvCYb.png' alt='docs' height='100px' style='padding-right:10px;'>
+          Docs
      </div>
+
 </a>
 
 ## About
