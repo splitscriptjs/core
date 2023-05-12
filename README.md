@@ -44,7 +44,7 @@ Coming soon
 
 <center> 
 <sub>
-<code>v1.0.0</code> | <a href='https://splitscript.js.org'>docs</a>
+<code>v1.0.3</code> | <a href='https://splitscript.js.org'>docs</a>
 
 by [ultraviolet](https://github.com/ultravioletasdf)
 </sub>
