@@ -13,3 +13,7 @@ Update `README.md`
 # 1.0.3
 
 Fixed type exports
+
+# 1.0.4
+
+Fixed exports

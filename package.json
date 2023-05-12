@@ -1,14 +1,14 @@
 {
 	"name": "@splitscript.js/core",
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"description": "Core SplitScript.js library",
 	"types": "./dist/types/index.d.ts",
 	"exports": {
 		".": {
-			"import": "./dist/esm/index.js",
-			"require": "./dist/cjs/index.js",
+			"import": "./dist/node/esm/index.js",
+			"require": "./dist/node/cjs/index.js",
 			"types": "./dist/types/index.d.ts",
-			"default": "./dist/esm/index.js"
+			"default": "./dist/node/esm/index.js"
 		}
 	},
 	"bin": {
