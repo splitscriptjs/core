@@ -9,3 +9,19 @@ Update `README.md`
 # 1.0.2
 
 Update `README.md`
+
+# 1.0.3
+
+Fixed type exports
+
+# 1.0.4
+
+Fixed exports
+
+# 1.0.5
+
+Update `README.md`
+
+# 1.1.0
+
+typesafety with `EventEmitter` validEvents - written by [rjansen](https://rjansen.de/)
