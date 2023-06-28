@@ -25,3 +25,7 @@ Update `README.md`
 # 1.1.0
 
 typesafety with `EventEmitter` validEvents - written by [rjansen](https://rjansen.de/)
+
+# 1.2.0
+
+Added `root()` - set and get the project root

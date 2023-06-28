@@ -37,6 +37,6 @@ $ npm i @splitscript.js/core
 
 <div align="center">
 
-<sub><code>v1.0.5</code> | by [ultraviolet](https://github.com/ultravioletasdf)</sub>
+<sub><code>v1.2.0</code> | by [ultraviolet](https://github.com/ultravioletasdf)</sub>
 
 </div>
