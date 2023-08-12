@@ -4,9 +4,9 @@ import fsp from 'fs/promises'
 import path from 'path'
 import { pathToFileURL } from 'url'
 import { glob } from 'glob'
-//@ts-ignore require.main.filename support in both ESM and CJS
-import filename from 'actual.require.main.filename'
-const root = path.dirname(filename)
+
+import { root } from '../index.js'
+
 // Make sure there are no duplicate EventEmitters
 const registered: string[] = []
 type Listener = {
@@ -51,7 +51,7 @@ export class EventEmitter<Events extends readonly string[]> {
 		data: object
 	) {
 		const files = await glob('/*.js', {
-			root: path.join(root, 'functions', this.uniqueName, ...event)
+			root: path.join(root(), 'functions', this.uniqueName, ...event)
 		})
 		for (let file of files) {
 			import(pathToFileURL(file).toString()).then((module) => {
@@ -84,7 +84,7 @@ export class EventEmitter<Events extends readonly string[]> {
 	): Promise<Listener[]>
 
 	async listeners(event?: string[]) {
-		let funcPath = path.join(root, 'functions', this.uniqueName)
+		let funcPath = path.join(root(), 'functions', this.uniqueName)
 
 		if (fs.existsSync(funcPath)) {
 			if (!event) {
@@ -134,14 +134,14 @@ export class EventEmitter<Events extends readonly string[]> {
 		this.uniqueName = uniqueName
 		registered.push(uniqueName)
 		fsp
-			.readFile(path.join(root, 'ss.json'), 'utf-8')
+			.readFile(path.join(root(), 'ss.json'), 'utf-8')
 			.then((value) => {
 				let current = JSON.parse(value)
 				current.packages[uniqueName] = {
 					validEvents,
 					packageName
 				}
-				fsp.writeFile(path.join(root, 'ss.json'), JSON.stringify(current))
+				fsp.writeFile(path.join(root(), 'ss.json'), JSON.stringify(current))
 			})
 			.catch((err) => {
 				let current = {
@@ -152,7 +152,7 @@ export class EventEmitter<Events extends readonly string[]> {
 						}
 					}
 				}
-				fsp.writeFile(path.join(root, 'ss.json'), JSON.stringify(current))
+				fsp.writeFile(path.join(root(), 'ss.json'), JSON.stringify(current))
 			})
 		this.validEvents = Array.from(validEvents)
 	}
