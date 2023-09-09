@@ -6,8 +6,11 @@ import path from 'node:path'
 const root = process.cwd()
 export async function isTs(_root?: string): Promise<boolean> {
 	let fileString = '{}'
-	if (fs.existsSync('./ss.json')) {
-		fileString = await fsp.readFile('./ss.json', 'utf-8')
+	if (fs.existsSync(_root ? path.join(_root, 'ss.json') : './ss.json')) {
+		fileString = await fsp.readFile(
+			_root ? path.join(_root, 'ss.json') : './ss.json',
+			'utf-8'
+		)
 	}
 	let ss = JSON.parse(fileString)
 

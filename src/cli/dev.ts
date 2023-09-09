@@ -118,8 +118,13 @@ export async function watchProject(root: string, main: string) {
 			parsed.name + '.js'
 		)
 		if (existsSync(outfile)) {
-			await fsp.rm(outfile)
 			console.log(c.bgRed(' DELET '), parsed.base)
+			const isMain =
+				path.basename(outfile) === main &&
+				path.dirname(outfile) === path.join(root, outdir)
+
+			if (isMain) return
+			await fsp.rm(outfile)
 			run(main, outdir, root)
 		}
 	})
