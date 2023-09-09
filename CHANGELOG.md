@@ -1,3 +1,7 @@
+# 2.0.1
+
+splitscript dev will run built file
+
 # 2.0.0
 
 Added watching and typescript building to splitscript dev

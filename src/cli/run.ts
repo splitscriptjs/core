@@ -24,7 +24,8 @@ export async function run(main: string, outdir: string, root: string) {
 			child = undefined
 		})
 	}
-	if (!existsSync(path.join(root, main)))
+
+	if (!existsSync(path.join(root, outdir, main)))
 		return console.error(c.bgRed(' ERROR '), `Could not find ${main}`)
 	child = spawn(`node`, [path.join(root, main)], {
 		shell: true,
