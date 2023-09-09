@@ -1,31 +1,37 @@
-# 1.0.0
+# 2.0.0
 
-First version (CLI, EventEmitter)
+Added watching and typescript building to splitscript dev
 
-# 1.0.1
+Can set `ROOT` enviroment variable to override the root set in `root()` or the automatic root finding
 
-Update `README.md`
+# 1.2.0
 
-# 1.0.2
-
-Update `README.md`
-
-# 1.0.3
-
-Fixed type exports
-
-# 1.0.4
-
-Fixed exports
-
-# 1.0.5
-
-Update `README.md`
+Added `root()` - set and get the project root
 
 # 1.1.0
 
 typesafety with `EventEmitter` validEvents - written by [rjansen](https://rjansen.de/)
 
-# 1.2.0
+# 1.0.5
 
-Added `root()` - set and get the project root
+Update `README.md`
+
+# 1.0.4
+
+Fixed exports
+
+# 1.0.3
+
+Fixed type exports
+
+# 1.0.2
+
+Update `README.md`
+
+# 1.0.1
+
+Update `README.md`
+
+# 1.0.0
+
+First version (CLI, EventEmitter)

@@ -31,12 +31,20 @@ It also has an event emitter for creating other packages, like [@splitscript.js/
 $ npm i @splitscript.js/core
 ```
 
+## Dev mode
+
+Run splitscript dev <file/folder> to add boilerplate in new listeners in the functions folder
+
+If a file/folder is provided, splitscript will build the files in the folder, or the folder the file is in and then run that.
+
+If its a folder, it will default to `index.ts/.js` depending on the type of project, or to the "main" set in `ss.json`
+
 ## Other packages
 
 [`@splitscript.js/discord`](https://www.npmjs.com/package/@splitscript.js/discord)
 
 <div align="center">
 
-<sub><code>v1.2.0</code> | by [ultraviolet](https://github.com/ultravioletasdf)</sub>
+<sub><code>v2.0.0</code> | by [ultraviolet](https://github.com/ultravioletasdf)</sub>
 
 </div>
