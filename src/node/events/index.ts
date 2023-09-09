@@ -1,10 +1,11 @@
 // Dependencies
 import fs from 'fs'
 import fsp from 'fs/promises'
+import { glob } from 'glob'
 import path from 'path'
 import { pathToFileURL } from 'url'
-import { glob } from 'glob'
 
+import ansiColors from 'ansi-colors'
 import { root } from '../index.js'
 
 // Make sure there are no duplicate EventEmitters
@@ -54,11 +55,19 @@ export class EventEmitter<Events extends readonly string[]> {
 			root: path.join(root(), 'functions', this.uniqueName, ...event)
 		})
 		for (let file of files) {
-			import(pathToFileURL(file).toString()).then((module) => {
+			const url = pathToFileURL(file)
+			import(url.toString()).then((module) => {
 				try {
 					// esm implementation
 					module.default(data)
 				} catch (e) {
+					if (typeof module !== 'function')
+						return console.log(
+							ansiColors.bgRed(' ERROR '),
+							`Listener ${path.basename(
+								file
+							)} does not export a function (export default for esm, module.exports = for cjs)`
+						)
 					// cjs implementation
 					module(data)
 				}

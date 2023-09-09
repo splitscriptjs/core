@@ -4,6 +4,7 @@ import filename from 'actual.require.main.filename'
 
 import variable from './utils/variable.js'
 function root(dir?: string) {
+	if (process.env.ROOT) return process.env.ROOT
 	let rootPath: string = path.dirname(filename)
 	if (!dir) return variable.get('root') ?? rootPath
 	if (typeof dir !== 'string') throw new Error('dir must be a string')

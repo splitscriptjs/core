@@ -2,22 +2,20 @@
 const { Command } = require('commander')
 const { AutoComplete, MultiSelect, Confirm } = require('enquirer')
 
-import fsp from 'fs/promises'
-import fs from 'fs'
-import chokidar from 'chokidar'
-import path from 'path'
-import { glob } from 'glob'
 import c from 'ansi-colors'
-import { spawn } from 'child_process'
+import fs from 'fs'
+import fsp from 'fs/promises'
+import { glob } from 'glob'
+import path from 'path'
+import { watchFunctions, watchProject } from './dev'
 import {
 	createFoldersRecursive,
+	getExistingEvents,
 	getPackageName,
+	getSplitscriptConfig,
 	getType,
 	getValidEvents,
-	isTs,
-	getCurrentFunctionPackage,
-	getEventName,
-	getExistingEvents
+	isTs
 } from './utils'
 
 const root = process.cwd()
@@ -52,14 +50,11 @@ program
 		const existing = await glob('/*.{ts,js}', { root: funcPath })
 		const numbers = existing
 			.map((p) =>
-				p.endsWith('.ts')
-					? path.basename(p, '.ts')
-					: path.basename(p, '.js')
+				p.endsWith('.ts') ? path.basename(p, '.ts') : path.basename(p, '.js')
 			)
 			.map(Number)
 			.filter((fname) => !isNaN(fname))
-		const incremented =
-			Math.max(...(numbers.length === 0 ? [0] : numbers)) + 1
+		const incremented = Math.max(...(numbers.length === 0 ? [0] : numbers)) + 1
 		await createFoldersRecursive(funcPath)
 		const type = await getType()
 		const packageName = await getPackageName(pckg)
@@ -128,9 +123,8 @@ program
 			.catch(handleReject)
 		if (cont) {
 			toDelete.forEach((file) => {
-				fsp.unlink(
-					path.join(root, 'functions', pckg, ...ans.split('/'), file)
-				)
+				fsp
+					.unlink(path.join(root, 'functions', pckg, ...ans.split('/'), file))
 					.then(() => console.log(c.green(`Deleted ${file}`)))
 					.catch(() => console.log(c.red(`Failed to delete ${file}`)))
 			})
@@ -148,116 +142,42 @@ program
 				`(Using ${type === 'commonjs' ? 'CommonJS' : 'ESModules'})`
 			)}`
 		)
+		if (file) {
+			const exists = fs.existsSync(file)
+			if (!exists) return console.log(c.bold.red(`File ${file} does not exist`))
+			const stat = await fsp.lstat(file)
+			if (stat.isDirectory()) {
+				const ss = await getSplitscriptConfig()
+				const ts = await isTs(path.join(root, file))
+				const main = ss.main ?? (ts ? 'index.ts' : 'index.js')
 
-		async function start() {
-			if (file) {
-				let filepath = path.resolve(root, file)
-				if (!fs.existsSync(filepath)) {
-					console.log(c.red(`File ${file} not found`))
-					process.exit(1)
-				}
-				if (file.endsWith('.ts')) {
-					console.log(c.red('Cannot run TypeScript files (yet)'))
-					return
-				}
-				/*
-				await new Promise(async (resolve) => {
-					if (file.endsWith('.ts')) {
-						
-						console.log(c.yellow('Building...'));
-						const tsc = spawn(
-							'tsc',
-							[file, '--outdir .ss-devbuild'],
-							{
-								env: process.env,
-								shell: true,
-							}
-						);
+				if (!fs.existsSync(path.join(file, main)))
+					return console.error(c.bgRed(' ERROR '), `Could not find ${main}`)
 
-						tsc.stdout.on('data', (data) => {
-							console.log(`stdout: ${data}`);
-						});
-
-						tsc.stderr.on('data', (data) => {
-							console.error(`stderr: ${data}`);
-						});
-
-						tsc.on('close', (code) => {
-							console.log(c.yellow('Built!'));
-							filepath = join(
-								dirname(filepath),
-								'.ss-devbuild',
-								basename(filepath, '.ts') + '.js'
-							);
-							resolve(null);
-						});
-						
-					} else resolve(null);
-				});
-				*/
-				function run() {
-					const child = spawn('node', [filepath])
-					console.log(`Started ${c.green(file)}`)
-					child.stdout?.on('data', (data) => {
-						const now = new Date()
-						const formattedDate = `${
-							now.getMonth() + 1
-						}/${now.getDate()}/${now
-							.getFullYear()
-							.toString()
-							.substr(-2)} ${now.getHours()}:${now
-							.getMinutes()
-							.toString()
-							.padStart(2, '0')}`
-						process.stdout.write(
-							`${c.green(formattedDate)} ${data}`
-						)
-					})
-					child.stderr?.on('data', (data) => {
-						const now = new Date()
-						const formattedDate = `${
-							now.getMonth() + 1
-						}/${now.getDate()}/${now
-							.getFullYear()
-							.toString()
-							.substr(-2)} ${now.getHours()}:${now
-							.getMinutes()
-							.toString()
-							.padStart(2, '0')}`
-						process.stderr.write(`${c.red(formattedDate)} ${data}`)
-					})
-					child.on('close', () => {
-						run()
-					})
-				}
-				run()
+				watchProject(path.join(root, file), main)
+			} else if (stat.isFile()) {
+				if (!fs.existsSync(file))
+					return console.error(
+						c.bgRed(' ERROR '),
+						`Could not find ${path.basename(file)}`
+					)
+				watchProject(path.join(root, path.dirname(file)), path.basename(file))
 			}
 		}
-		start()
-		const watcher = chokidar.watch(path.join(root, 'functions'), {
-			ignoreInitial: true
-		})
 
-		watcher.on('add', async (filepath: string) => {
-			const currentFunctionPackage = getCurrentFunctionPackage(filepath)
-			const packageName = await getPackageName(currentFunctionPackage)
-			const eventName = getEventName(filepath, currentFunctionPackage)
-			console.log(`Added ${c.blue(path.basename(filepath))}`)
-
-			if (filepath.endsWith('.js')) {
-				const code =
-					type === 'module'
-						? `/** @typedef {import('${packageName}').Events.${eventName}} Event */\n/** @param {Event} event */\n\nexport default async function (event) {\n\n}`
-						: `/** @typedef {import('${packageName}').Events.${eventName}} Event */\n/** @param {Event} event */\n\nmodule.exports = async function (event) {\n\n}`
-				fsp.writeFile(filepath, code).catch(() =>
-					c.red('Error: Failed to update file')
-				)
-			} else if (filepath.endsWith('.ts')) {
-				fsp.writeFile(
-					filepath,
-					`import { Events } from '${packageName}';\nexport default async function (event: Events.${eventName}) {\n\n}`
-				).catch(() => c.red('Error: Failed to update file'))
-			}
-		})
+		watchFunctions(root)
 	})
+
+program
+	.command('build')
+	.description(c.italic('Build a project for production'))
+	.argument('<folder>', 'Name of folder to build')
+	.action(async (folder) => {
+		if (!fs.existsSync(folder))
+			return console.error(
+				c.bgRed(' ERROR '),
+				`Could not find ${path.basename(folder)}`
+			)
+	})
+
 program.parse()
