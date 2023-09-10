@@ -158,7 +158,7 @@ export class EventEmitter<Events extends readonly string[]> {
 				}
 				fsp.writeFile(
 					path.join(process.env.CONFIG_LOCATION ?? root(), 'ss.json'),
-					JSON.stringify(current)
+					JSON.stringify(current, null, '\t')
 				)
 			})
 			.catch((err) => {
@@ -173,7 +173,7 @@ export class EventEmitter<Events extends readonly string[]> {
 				}
 				fsp.writeFile(
 					path.join(process.env.CONFIG_LOCATION ?? root(), 'ss.json'),
-					JSON.stringify(current)
+					JSON.stringify(current, null, '\t')
 				)
 			})
 		this.validEvents = Array.from(validEvents)
