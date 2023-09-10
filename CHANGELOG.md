@@ -1,3 +1,7 @@
+# 2.0.4
+
+upgrade build target
+
 # 2.0.3
 
 can use splitscript dev [file/folder] without running before
