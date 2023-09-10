@@ -1,3 +1,7 @@
+# 2.0.5
+
+JSON stringify `ss.json` with tabs
+
 # 2.0.4
 
 upgrade build target
