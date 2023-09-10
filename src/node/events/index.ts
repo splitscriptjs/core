@@ -56,22 +56,24 @@ export class EventEmitter<Events extends readonly string[]> {
 		})
 		for (let file of files) {
 			const url = pathToFileURL(file)
-			import(url.toString()).then((module) => {
-				try {
-					// esm implementation
-					module.default(data)
-				} catch (e) {
-					if (typeof module !== 'function')
-						return console.log(
-							ansiColors.bgRed(' ERROR '),
-							`Listener ${path.basename(
-								file
-							)} does not export a function (export default for esm, module.exports = for cjs)`
-						)
-					// cjs implementation
-					module(data)
-				}
-			})
+			import(url.toString())
+				.then((module) => {
+					try {
+						// esm implementation
+						module.default(data)
+					} catch (e) {
+						if (typeof module !== 'function')
+							return console.log(
+								ansiColors.bgRed(' ERROR '),
+								`Listener ${path.basename(
+									file
+								)} does not export a function (export default for esm, module.exports = for cjs)`
+							)
+						// cjs implementation
+						module(data)
+					}
+				})
+				.catch(() => console.log(`failed to run function`))
 		}
 	}
 	/** Get a list of event listeners
@@ -142,17 +144,25 @@ export class EventEmitter<Events extends readonly string[]> {
 			throw new Error(`Cannot have duplicate Event Emitters (${uniqueName})`)
 		this.uniqueName = uniqueName
 		registered.push(uniqueName)
+		console.log(process.env.CONFIG_LOCATION ?? root())
 		fsp
-			.readFile(path.join(root(), 'ss.json'), 'utf-8')
+			.readFile(
+				path.join(process.env.CONFIG_LOCATION ?? root(), 'ss.json'),
+				'utf-8'
+			)
 			.then((value) => {
 				let current = JSON.parse(value)
 				current.packages[uniqueName] = {
 					validEvents,
 					packageName
 				}
-				fsp.writeFile(path.join(root(), 'ss.json'), JSON.stringify(current))
+				fsp.writeFile(
+					path.join(process.env.CONFIG_LOCATION ?? root(), 'ss.json'),
+					JSON.stringify(current)
+				)
 			})
 			.catch((err) => {
+				console.log(err)
 				let current = {
 					packages: {
 						[uniqueName]: {
@@ -161,7 +171,10 @@ export class EventEmitter<Events extends readonly string[]> {
 						}
 					}
 				}
-				fsp.writeFile(path.join(root(), 'ss.json'), JSON.stringify(current))
+				fsp.writeFile(
+					path.join(process.env.CONFIG_LOCATION ?? root(), 'ss.json'),
+					JSON.stringify(current)
+				)
 			})
 		this.validEvents = Array.from(validEvents)
 	}
