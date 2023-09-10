@@ -45,6 +45,6 @@ If its a folder, it will default to `index.ts/.js` depending on the type of proj
 
 <div align="center">
 
-<sub><code>v2.0.2</code> | by [ultraviolet](https://github.com/ultravioletasdf)</sub>
+<sub><code>v2.0.3</code> | by [ultraviolet](https://github.com/ultravioletasdf)</sub>
 
 </div>

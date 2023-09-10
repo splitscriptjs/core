@@ -32,7 +32,8 @@ export async function run(main: string, outdir: string, root: string) {
 	child = spawn(`node`, [path.join(root, outdir, parsed.name + '.js')], {
 		shell: true,
 		env: {
-			ROOT: path.join(root, outdir)
+			ROOT: path.join(root, outdir),
+			CONFIG_LOCATION: root
 		}
 	})
 	pids.push(child.pid)

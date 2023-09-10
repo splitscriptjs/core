@@ -1,3 +1,13 @@
+# 2.0.3
+
+can use splitscript dev [file/folder] without running before
+
+by adding CONFIG_LOCATION enviroment variable
+
+# 2.0.2
+
+will not restart process in splitscript dev if main file is deleted/renamed
+
 # 2.0.1
 
 splitscript dev will run built file
