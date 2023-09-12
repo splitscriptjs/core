@@ -39,12 +39,20 @@ If a file/folder is provided, splitscript will build the files in the folder, or
 
 If its a folder, it will default to `index.ts/.js` depending on the type of project, or to the "main" set in `ss.json`
 
+To set the out folder, set `dev` in `ss.json`
+
+## Build
+
+You can build a project using the command `splitscript build <folder>`
+
+To set the build folder, set `build` in `ss.json`
+
 ## Other packages
 
 [`@splitscript.js/discord`](https://www.npmjs.com/package/@splitscript.js/discord)
 
 <div align="center">
 
-<sub><code>v2.0.5</code> | by [ultraviolet](https://github.com/ultravioletasdf)</sub>
+<sub><code>v2.1.0</code> | by [ultraviolet](https://github.com/ultravioletasdf)</sub>
 
 </div>

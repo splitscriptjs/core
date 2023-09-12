@@ -7,9 +7,11 @@ import fs from 'fs'
 import fsp from 'fs/promises'
 import { glob } from 'glob'
 import path from 'path'
+import { build } from './build'
 import { watchFunctions, watchProject } from './dev'
 import {
 	createFoldersRecursive,
+	deleteDirectoryRecursive,
 	getExistingEvents,
 	getPackageName,
 	getSplitscriptConfig,
@@ -178,6 +180,25 @@ program
 				c.bgRed(' ERROR '),
 				`Could not find ${path.basename(folder)}`
 			)
+		const stat = await fsp.lstat(folder)
+		if (!stat.isDirectory())
+			return console.log(c.bgRed(' ERROR '), `Path must be a folder`)
+		const buildDir = (await getSplitscriptConfig(folder)).build ?? 'build'
+		const files = await glob('/**/*.{ts,js}', {
+			root: path.join(root, folder),
+			ignore: [`**/${buildDir}/**`, '**/node_modules/**']
+		})
+		deleteDirectoryRecursive(path.join(root, folder, buildDir))
+		const buildPromises = files.map((file) =>
+			build(file, folder, buildDir).catch((e) => {
+				console.error(
+					c.bgRed(' ERROR '),
+					`Failed to build ${c.bold.red(file)}\n`,
+					e
+				)
+			})
+		)
+		await Promise.all(buildPromises)
 	})
 
 program.parse()
