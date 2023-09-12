@@ -104,10 +104,13 @@ export async function getExistingEvents(pckg: string) {
 	}
 	return exists
 }
-export async function getSplitscriptConfig() {
+export async function getSplitscriptConfig(root?: string) {
 	let fileString = '{}'
-	if (fs.existsSync('./ss.json')) {
-		fileString = await fsp.readFile('./ss.json', 'utf-8')
+	if (fs.existsSync(root ? path.join(root, 'ss.json') : 'ss.json')) {
+		fileString = await fsp.readFile(
+			root ? path.join(root, 'ss.json') : 'ss.json',
+			'utf-8'
+		)
 	}
 	let ss = JSON.parse(fileString)
 	return ss

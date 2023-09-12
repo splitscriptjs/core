@@ -2,9 +2,9 @@ import c from 'ansi-colors'
 import esbuild from 'esbuild'
 import path from 'path'
 import { getSplitscriptConfig } from './utils'
-export async function build(file: string, root: string) {
+export async function build(file: string, root: string, out?: string) {
 	const start = performance.now()
-	const outdir = (await getSplitscriptConfig()).out
+	const outdir = out ?? (await getSplitscriptConfig(root)).dev
 	const parsed = path.parse(file)
 
 	try {
@@ -14,7 +14,7 @@ export async function build(file: string, root: string) {
 				root,
 				outdir ?? '.ss',
 				path.relative(root, parsed.dir),
-				parsed.name + '.js'
+				parsed.ext === '.ts' ? parsed.name + '.js' : parsed.base
 			),
 			allowOverwrite: true,
 			logLevel: 'error',

@@ -80,7 +80,7 @@ export async function watchFunctions(root: string) {
 	})
 }
 export async function watchProject(root: string, main: string) {
-	const outdir = (await getSplitscriptConfig()).out ?? '.ss'
+	const outdir = (await getSplitscriptConfig(root)).dev ?? '.ss'
 
 	const watcher = chokidar.watch(root, {
 		ignored: [`**/${outdir}/**`, '**/*.json'],
@@ -91,7 +91,7 @@ export async function watchProject(root: string, main: string) {
 		ignore: [`${outdir}/**`, '**/node_modules/**']
 	})
 
-	deleteDirectoryRecursive(path.join(root, '.ss'))
+	deleteDirectoryRecursive(path.join(root, outdir))
 	await new Promise<void>((res) => {
 		let count = 0
 		for (const file of files) {

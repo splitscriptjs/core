@@ -2,3 +2,4 @@
 /dist
 /test
 /package-lock.json
+/pnpm-lock.yaml

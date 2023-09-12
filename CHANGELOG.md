@@ -1,3 +1,9 @@
+# 2.1.0
+
+add `splitscript build <folder>` to build all files in that folder
+
+setting dev/build in ss.json works relative to where you ran the command from
+
 # 2.0.5
 
 JSON stringify `ss.json` with tabs

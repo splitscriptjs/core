@@ -144,7 +144,6 @@ export class EventEmitter<Events extends readonly string[]> {
 			throw new Error(`Cannot have duplicate Event Emitters (${uniqueName})`)
 		this.uniqueName = uniqueName
 		registered.push(uniqueName)
-		console.log(process.env.CONFIG_LOCATION ?? root())
 		fsp
 			.readFile(
 				path.join(process.env.CONFIG_LOCATION ?? root(), 'ss.json'),
@@ -162,7 +161,6 @@ export class EventEmitter<Events extends readonly string[]> {
 				)
 			})
 			.catch((err) => {
-				console.log(err)
 				let current = {
 					packages: {
 						[uniqueName]: {
