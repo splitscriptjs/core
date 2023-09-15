@@ -1,3 +1,7 @@
+# 2.1.1
+
+add esbuild to dependency list
+
 # 2.1.0
 
 add `splitscript build <folder>` to build all files in that folder
