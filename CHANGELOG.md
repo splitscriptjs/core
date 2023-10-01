@@ -1,3 +1,7 @@
+# 2.1.2
+
+Will not catch application errors when sending an event
+
 # 2.1.1
 
 add esbuild to dependency list

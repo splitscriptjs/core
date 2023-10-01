@@ -56,24 +56,20 @@ export class EventEmitter<Events extends readonly string[]> {
 		})
 		for (let file of files) {
 			const url = pathToFileURL(file)
-			import(url.toString())
-				.then((module) => {
-					try {
-						// esm implementation
-						module.default(data)
-					} catch (e) {
-						if (typeof module !== 'function')
-							return console.log(
-								ansiColors.bgRed(' ERROR '),
-								`Listener ${path.basename(
-									file
-								)} does not export a function (export default for esm, module.exports = for cjs)`
-							)
-						// cjs implementation
-						module(data)
-					}
-				})
-				.catch(() => console.log(`failed to run function`))
+			import(url.toString()).then((module) => {
+				if (typeof module.default === 'function') {
+					module.default(data)
+				} else if (typeof module === 'function') {
+					module(data)
+				} else {
+					return console.log(
+						ansiColors.bgRed(' ERROR '),
+						`Listener ${path.basename(
+							file
+						)} does not export a function (export default for esm, module.exports = for cjs)`
+					)
+				}
+			})
 		}
 	}
 	/** Get a list of event listeners
