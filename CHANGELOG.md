@@ -1,3 +1,9 @@
+# 2.2.0
+
+Allow wildcard events
+
+Move prettier config to `package.json`
+
 # 2.1.2
 
 Will not catch application errors when sending an event

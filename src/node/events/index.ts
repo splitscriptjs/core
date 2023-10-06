@@ -51,10 +51,13 @@ export class EventEmitter<Events extends readonly string[]> {
 		/** event data to send */
 		data: object
 	) {
-		const files = await glob('/*.js', {
-			root: path.join(root(), 'functions', this.uniqueName, ...event)
-		})
-		for (let file of files) {
+		const files = await glob(
+			`/functions/${this.uniqueName}/${event.join('/')}/*.js`,
+			{
+				root: root()
+			}
+		)
+		for (const file of files) {
 			const url = pathToFileURL(file)
 			import(url.toString()).then((module) => {
 				if (typeof module.default === 'function') {

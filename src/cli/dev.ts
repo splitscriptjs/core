@@ -15,6 +15,43 @@ import {
 	getType,
 	validEventFolder
 } from './utils'
+
+function globMatch(pattern: string[], items: string[]): boolean {
+	let patternIndex = 0
+	let itemIndex = 0
+
+	while (patternIndex < pattern.length && itemIndex < items.length) {
+		const currentPattern = pattern[patternIndex]
+		const currentItem = items[itemIndex]
+
+		if (currentPattern === '**') {
+			// Handle '**': allow any number of items
+			patternIndex++
+			while (
+				itemIndex < items.length &&
+				currentItem !== pattern[patternIndex]
+			) {
+				itemIndex++
+			}
+			patternIndex++
+		} else if (currentPattern === '*') {
+			// Handle '*': allow one item
+			patternIndex++
+			itemIndex++
+		} else {
+			// Compare other items
+			if (currentPattern !== currentItem) {
+				return false
+			}
+			patternIndex++
+			itemIndex++
+		}
+	}
+
+	// Check if we reached the end of both arrays
+	return patternIndex === pattern.length && itemIndex === items.length
+}
+
 export async function watchFunctions(root: string) {
 	const watcher = chokidar.watch(path.join(root, 'functions'), {
 		ignoreInitial: true
@@ -53,24 +90,41 @@ export async function watchFunctions(root: string) {
 			console.log(c.bgRed(` ERROR `), `Malformed validEvents in ss.json`)
 			process.exit(1)
 		}
+		const split: string[][] = validEvents.map((v) => v.split(/[./\\_]/))
+		const isGlobMatched = split.some((pattern) => globMatch(pattern, eventName))
 		if (
-			!validEvents
-				.map((v) => JSON.stringify(v.split(/[./\\_]/)))
-				.includes(JSON.stringify(eventName))
+			!split
+				.map((v) => JSON.stringify(v))
+				.includes(JSON.stringify(eventName)) &&
+			!isGlobMatched
 		)
 			return
+
+		let name: string
+		if (isGlobMatched) {
+			const matched = split.find((pattern) => globMatch(pattern, eventName))
+			if (!matched) {
+				name = eventName
+					.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+					.join('')
+			} else {
+				name = matched
+					.map((word) => {
+						if (word === '**') return 'XX'
+						if (word === '*') return 'X'
+						return word.charAt(0).toUpperCase() + word.slice(1)
+					})
+					.join('')
+				console.log(name)
+			}
+		} else {
+			name = eventName
+				.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+				.join('')
+		}
 		const _type = p.ext === '.ts' ? 'typescript' : type
 		fsp
-			.writeFile(
-				filePath,
-				boilerplate(
-					_type,
-					packageName,
-					eventName
-						.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-						.join('')
-				)
-			)
+			.writeFile(filePath, boilerplate(_type, packageName, name))
 			.then(() => {
 				console.log(c.bgBlue(' ADDED '), `Added ${c.blue(p.base)}`)
 			})
