@@ -98,7 +98,7 @@ export class EventEmitter<Events extends readonly string[]> {
 
 		if (fs.existsSync(funcPath)) {
 			if (!event) {
-				let paths = await glob('/**/*.js', {
+				const paths = await glob('/**/*.js', {
 					root: funcPath
 				})
 				return paths.map((p) => {
@@ -108,9 +108,12 @@ export class EventEmitter<Events extends readonly string[]> {
 					}
 				})
 			} else {
-				let paths = await glob('/*.js', {
-					root: path.join(funcPath, ...event)
-				})
+				const paths = await glob(
+					`/functions/${this.uniqueName}/${event.join('/')}/*.js`,
+					{
+						root: root()
+					}
+				)
 				return paths.map((p) => {
 					return {
 						path: p,
