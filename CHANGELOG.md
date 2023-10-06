@@ -1,3 +1,7 @@
+# 2.2.1
+
+Add wildcards to emitter.listeners
+
 # 2.2.0
 
 Allow wildcard events
