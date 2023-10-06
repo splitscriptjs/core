@@ -1,3 +1,17 @@
+# 2.2.0
+
+Allow wildcard events
+
+Move prettier config to `package.json`
+
+# 2.1.2
+
+Will not catch application errors when sending an event
+
+# 2.1.1
+
+add esbuild to dependency list
+
 # 2.1.0
 
 add `splitscript build <folder>` to build all files in that folder

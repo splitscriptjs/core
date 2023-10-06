@@ -1,6 +1,6 @@
 {
 	"name": "@splitscript.js/core",
-	"version": "2.1.0",
+	"version": "2.2.0",
 	"description": "Core SplitScript.js library",
 	"types": "./dist/types/index.d.ts",
 	"exports": {
@@ -34,8 +34,7 @@
 	},
 	"homepage": "https://splitscript.js.org",
 	"devDependencies": {
-		"@types/node": "^18.16.5",
-		"esbuild": "^0.17.18"
+		"@types/node": "^18.16.5"
 	},
 	"dependencies": {
 		"actual.require.main.filename": "^1.0.0",
@@ -43,7 +42,16 @@
 		"chokidar": "^3.5.3",
 		"commander": "^10.0.1",
 		"enquirer": "^2.3.6",
+		"esbuild": "0.17",
 		"glob": "^10.2.2",
 		"ps-list": "^8.1.1"
+	},
+	"prettier": {
+		"semi": false,
+		"singleQuote": true,
+		"useTabs": true,
+		"bracketSpacing": true,
+		"arrowParens": "always",
+		"trailingComma": "none"
 	}
 }

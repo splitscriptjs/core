@@ -51,29 +51,28 @@ export class EventEmitter<Events extends readonly string[]> {
 		/** event data to send */
 		data: object
 	) {
-		const files = await glob('/*.js', {
-			root: path.join(root(), 'functions', this.uniqueName, ...event)
-		})
-		for (let file of files) {
+		const files = await glob(
+			`/functions/${this.uniqueName}/${event.join('/')}/*.js`,
+			{
+				root: root()
+			}
+		)
+		for (const file of files) {
 			const url = pathToFileURL(file)
-			import(url.toString())
-				.then((module) => {
-					try {
-						// esm implementation
-						module.default(data)
-					} catch (e) {
-						if (typeof module !== 'function')
-							return console.log(
-								ansiColors.bgRed(' ERROR '),
-								`Listener ${path.basename(
-									file
-								)} does not export a function (export default for esm, module.exports = for cjs)`
-							)
-						// cjs implementation
-						module(data)
-					}
-				})
-				.catch(() => console.log(`failed to run function`))
+			import(url.toString()).then((module) => {
+				if (typeof module.default === 'function') {
+					module.default(data)
+				} else if (typeof module === 'function') {
+					module(data)
+				} else {
+					return console.log(
+						ansiColors.bgRed(' ERROR '),
+						`Listener ${path.basename(
+							file
+						)} does not export a function (export default for esm, module.exports = for cjs)`
+					)
+				}
+			})
 		}
 	}
 	/** Get a list of event listeners
