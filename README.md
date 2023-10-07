@@ -53,6 +53,6 @@ To set the build folder, set `build` in `ss.json`
 
 <div align="center">
 
-<sub><code>v2.2.1</code> | by [ultraviolet](https://github.com/ultravioletasdf)</sub>
+<sub><code>v2.2.2</code> | by [ultraviolet](https://github.com/ultravioletasdf)</sub>
 
 </div>

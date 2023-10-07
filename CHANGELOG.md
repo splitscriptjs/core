@@ -1,3 +1,9 @@
+# 2.2.2
+
+Allow wildcard `**` at the end of events
+
+Watches for functions watches correct folder when passing a folder
+
 # 2.2.1
 
 Add wildcards to emitter.listeners
