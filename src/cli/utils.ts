@@ -52,10 +52,15 @@ export async function getPackageName(pckg: string): Promise<string[]> {
 	let ss = JSON.parse(fileString)
 	return ss?.packages[pckg]?.packageName
 }
-export async function getType(): Promise<string> {
+export async function getType(root?: string): Promise<string> {
 	let pckg = '{}'
-	if (fs.existsSync('./package.json')) {
-		pckg = await fsp.readFile('./package.json', 'utf-8')
+	if (
+		fs.existsSync(root ? path.join(root, 'package.json') : './package.json')
+	) {
+		pckg = await fsp.readFile(
+			root ? path.join(root, 'package.json') : './package.json',
+			'utf-8'
+		)
 	}
 	const obj = JSON.parse(pckg)
 
@@ -76,10 +81,13 @@ export function validEventFolder(
 }
 export function getEventName(
 	filepath: string,
-	currentFunctionPackage: string
+	currentFunctionPackage: string,
+	root?: string
 ): string[] {
 	const a = path.relative(
-		path.join('./functions', currentFunctionPackage),
+		root
+			? path.join(root, 'functions', currentFunctionPackage)
+			: path.join('./functions', currentFunctionPackage),
 		filepath
 	)
 	return path.dirname(a).split(path.sep)

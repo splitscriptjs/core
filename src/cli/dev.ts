@@ -17,6 +17,13 @@ import {
 } from './utils'
 
 function globMatch(pattern: string[], items: string[]): boolean {
+	const beforeDoubleStar = pattern.slice(0, pattern.indexOf('**'))
+	const itemsBeforeDoubleStar = items.slice(0, beforeDoubleStar.length)
+	if (
+		pattern.at(-1) === '**' &&
+		JSON.stringify(beforeDoubleStar) === JSON.stringify(itemsBeforeDoubleStar)
+	)
+		return true
 	let patternIndex = 0
 	let itemIndex = 0
 
@@ -60,8 +67,8 @@ export async function watchFunctions(root: string) {
 	watcher.on('add', async (filePath: string, stats) => {
 		const p = path.parse(filePath)
 		if (stats?.size !== 0) return
-		const type = await getType()
-		const ss = await getSplitscriptConfig()
+		const type = await getType(root)
+		const ss = await getSplitscriptConfig(root)
 		if (!ss.packages) {
 			console.log(c.bgRed(` ERROR `), `Invalid ss.json`)
 			process.exit(1)
@@ -70,7 +77,7 @@ export async function watchFunctions(root: string) {
 		const eventFolder = getEventFolder(filePath)
 		if (!validEventFolder(ss, eventFolder)) return
 
-		const eventName = getEventName(filePath, eventFolder)
+		const eventName = getEventName(filePath, eventFolder, root)
 		const packageName = ss.packages[eventFolder]?.packageName
 		if (!packageName)
 			return console.log(
@@ -115,7 +122,6 @@ export async function watchFunctions(root: string) {
 						return word.charAt(0).toUpperCase() + word.slice(1)
 					})
 					.join('')
-				console.log(name)
 			}
 		} else {
 			name = eventName

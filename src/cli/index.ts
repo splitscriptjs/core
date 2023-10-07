@@ -157,6 +157,7 @@ program
 					return console.error(c.bgRed(' ERROR '), `Could not find ${main}`)
 
 				watchProject(path.join(root, file), main)
+				watchFunctions(path.join(root, file))
 			} else if (stat.isFile()) {
 				if (!fs.existsSync(file))
 					return console.error(
@@ -164,10 +165,11 @@ program
 						`Could not find ${path.basename(file)}`
 					)
 				watchProject(path.join(root, path.dirname(file)), path.basename(file))
+				watchFunctions(root)
 			}
+		} else {
+			watchFunctions(root)
 		}
-
-		watchFunctions(root)
 	})
 
 program
