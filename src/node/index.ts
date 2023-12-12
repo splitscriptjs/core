@@ -13,5 +13,12 @@ function root(dir?: string) {
 	}
 	return variable.get('root') ?? rootPath
 }
+type HandleFunction = (data: object, error: unknown) => unknown
+function handleError(handleFunction: HandleFunction) {
+	const handleFunctions = variable.get('handleFunctions') ?? []
+	handleFunctions?.push(handleFunction)
+	variable.set('handleFunctions', handleFunctions)
+}
 export { EventEmitter } from './events/index.js'
-export { root }
+export { root, handleError }
+export type { HandleFunction }

@@ -1,3 +1,7 @@
+# 2.3.0
+
+Add handleError function
+
 # 2.2.2
 
 Allow wildcard `**` at the end of events
