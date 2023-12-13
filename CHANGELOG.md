@@ -1,3 +1,7 @@
+# 2.3.1
+
+Add documentation comments to `handleError()`
+
 # 2.3.0
 
 Add handleError function

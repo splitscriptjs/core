@@ -14,7 +14,12 @@ function root(dir?: string) {
 	return variable.get('root') ?? rootPath
 }
 type HandleFunction = (data: object, error: unknown) => unknown
-function handleError(handleFunction: HandleFunction) {
+/**
+ * Catch all errors from listener functions
+ */
+function handleError(
+	/** function to run when a listener errors */ handleFunction: HandleFunction
+) {
 	const handleFunctions = variable.get('handleFunctions') ?? []
 	handleFunctions?.push(handleFunction)
 	variable.set('handleFunctions', handleFunctions)
