@@ -70,6 +70,6 @@ handleError((data, err) => {
 
 <div align="center">
 
-<sub><code>v2.3.2</code> | by [ultraviolet](https://github.com/ultravioletasdf)</sub>
+<sub><code>v2.3.3</code> | by [ultraviolet](https://github.com/ultravioletasdf)</sub>
 
 </div>

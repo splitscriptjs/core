@@ -1,3 +1,7 @@
+# 2.3.3
+
+Fix running projects with a space in the folder name
+
 # 2.3.2
 
 Build
