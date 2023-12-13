@@ -1,3 +1,7 @@
+# 2.3.2
+
+Build
+
 # 2.3.1
 
 Add documentation comments to `handleError()`
