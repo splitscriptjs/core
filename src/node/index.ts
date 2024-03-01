@@ -3,6 +3,9 @@ import path from 'path'
 import filename from 'actual.require.main.filename'
 
 import variable from './utils/variable.js'
+/**
+ * Gets or sets the root directory for running an app
+ */
 function root(dir?: string): string {
 	if (process.env.ROOT) return process.env.ROOT
 	let rootPath: string = path.dirname(filename)
@@ -13,6 +16,7 @@ function root(dir?: string): string {
 	}
 	return variable.get('root') ?? rootPath
 }
+/** **Internal** - function type to be used for handling errors */
 type HandleFunction = (data: object, error: unknown) => unknown
 /**
  * Catch all errors from listener functions
