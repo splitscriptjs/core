@@ -8,8 +8,9 @@ import { pathToFileURL } from 'url'
 import ansiColors from 'ansi-colors'
 import { root } from '../index.js'
 
-// Make sure there are no duplicate EventEmitters
+/** **Internal** - Used to check for duplicate event listeners */
 const registered: string[] = []
+/** **Internal** - Type returned when getting all listeners */
 type Listener = {
 	/** Folder names of the event
 	 * @example

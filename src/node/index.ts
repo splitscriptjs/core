@@ -3,7 +3,10 @@ import path from 'path'
 import filename from 'actual.require.main.filename'
 
 import variable from './utils/variable.js'
-function root(dir?: string) {
+/**
+ * Gets or sets the root directory for running an app
+ */
+function root(dir?: string): string {
 	if (process.env.ROOT) return process.env.ROOT
 	let rootPath: string = path.dirname(filename)
 	if (!dir) return variable.get('root') ?? rootPath
@@ -13,5 +16,18 @@ function root(dir?: string) {
 	}
 	return variable.get('root') ?? rootPath
 }
+/** **Internal** - function type to be used for handling errors */
+type HandleFunction = (data: object, error: unknown) => unknown
+/**
+ * Catch all errors from listener functions
+ */
+function handleError(
+	/** function to run when a listener errors */ handleFunction: HandleFunction
+) {
+	const handleFunctions = variable.get('handleFunctions') ?? []
+	handleFunctions?.push(handleFunction)
+	variable.set('handleFunctions', handleFunctions)
+}
 export { EventEmitter } from './events/index.js'
-export { root }
+export { root, handleError }
+export type { HandleFunction }
