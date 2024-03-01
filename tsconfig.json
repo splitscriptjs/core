@@ -10,7 +10,8 @@
 		"declaration": true,
 		"esModuleInterop": true,
 		"target": "ESNext",
-		"outDir": "dist/types"
+		"outDir": "dist/types",
+		"moduleResolution": "nodenext"
 	},
 	"include": ["src/node/**/*"]
 }
