@@ -26,10 +26,10 @@ export async function run(main: string, outdir: string, root: string) {
 	}
 
 	const parsed = path.parse(main)
-	console.log(path.join(root, outdir, parsed.name + '.js'))
+
 	if (!existsSync(path.join(root, outdir, parsed.name + '.js')))
 		return console.error(c.bgRed(' ERROR '), `Could not find ${main}`)
-	child = spawn(`node`, [`"${path.join(root, outdir, parsed.name + '.js')}"`], {
+	child = spawn(`node`, [path.join(root, outdir, parsed.name + '.js')], {
 		shell: true,
 		env: {
 			ROOT: path.join(root, outdir),

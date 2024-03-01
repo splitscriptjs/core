@@ -1,8 +1,16 @@
 {
-	"name": "@splitscript/core",
-	"version": "2.3.3",
+	"name": "@splitscript.js/core",
+	"version": "2.2.2",
 	"description": "Core SplitScript.js library",
-	"exports": "./src/node/index.ts",
+	"types": "./dist/types/index.d.ts",
+	"exports": {
+		".": {
+			"import": "./dist/node/esm/index.js",
+			"require": "./dist/node/cjs/index.js",
+			"types": "./dist/types/index.d.ts",
+			"default": "./dist/node/esm/index.js"
+		}
+	},
 	"bin": {
 		"splitscript": "./dist/cli/index.js"
 	},
