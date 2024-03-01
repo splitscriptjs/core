@@ -33,6 +33,7 @@ type Split<S extends string, D extends string> = string extends S
 	? [T, ...Split<U, D>]
 	: [S]
 
+/** Used to send events */
 export class EventEmitter<Events extends readonly string[]> {
 	/** folder under `projectroot/functions/` for events to be sent */
 	uniqueName: string
