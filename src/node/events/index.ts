@@ -7,7 +7,6 @@ import { pathToFileURL } from 'url'
 
 import ansiColors from 'ansi-colors'
 import { root } from '../index.js'
-import variable from '../utils/variable.js'
 
 /** **Internal** - Used to check for duplicate event listeners */
 const registered: string[] = []
@@ -62,28 +61,17 @@ export class EventEmitter<Events extends readonly string[]> {
 		for (const file of files) {
 			const url = pathToFileURL(file)
 			import(url.toString()).then((module) => {
-				if (
-					typeof module.default !== 'function' &&
-					typeof module !== 'function'
-				)
+				if (typeof module.default === 'function') {
+					module.default(data)
+				} else if (typeof module === 'function') {
+					module(data)
+				} else {
 					return console.log(
 						ansiColors.bgRed(' ERROR '),
 						`Listener ${path.basename(
 							file
 						)} does not export a function (export default for esm, module.exports = for cjs)`
 					)
-				try {
-					if (typeof module.default === 'function') {
-						module.default(data)
-					} else if (typeof module === 'function') {
-						module(data)
-					}
-				} catch (e) {
-					const handleFunctions = variable.get('handleFunctions')
-					if (!handleFunctions || handleFunctions?.length === 0) throw e
-					for (const func of handleFunctions) {
-						func(data, e)
-					}
 				}
 			})
 		}
@@ -175,7 +163,7 @@ export class EventEmitter<Events extends readonly string[]> {
 					JSON.stringify(current, null, '\t')
 				)
 			})
-			.catch(() => {
+			.catch((err) => {
 				let current = {
 					packages: {
 						[uniqueName]: {

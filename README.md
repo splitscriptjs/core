@@ -47,29 +47,12 @@ You can build a project using the command `splitscript build <folder>`
 
 To set the build folder, set `build` in `ss.json`
 
-## Catching Errors
-
-You can use the `handleError` for catching all listeners that fail
-
-```ts
-import { handleError } from '@splitscript.js/core'
-handleError((data, err) => {
-	console.log('Error: ', err)
-})
-// You can add multiple error handlers
-handleError((data, err) => {
-	console.log('This also handles the same error: ', err)
-})
-```
-
-⚠ Make sure you put `handleError()` before any other code so it can handle all errors
-
 ## Other packages
 
 [`@splitscript.js/discord`](https://www.npmjs.com/package/@splitscript.js/discord)
 
 <div align="center">
 
-<sub><code>v2.3.3</code> | by [ultraviolet](https://github.com/ultravioletasdf)</sub>
+<sub><code>v2.2.2</code> | by [ultraviolet](https://github.com/ultravioletasdf)</sub>
 
 </div>
