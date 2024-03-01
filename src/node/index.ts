@@ -3,7 +3,7 @@ import path from 'path'
 import filename from 'actual.require.main.filename'
 
 import variable from './utils/variable.js'
-function root(dir?: string) {
+function root(dir?: string): string {
 	if (process.env.ROOT) return process.env.ROOT
 	let rootPath: string = path.dirname(filename)
 	if (!dir) return variable.get('root') ?? rootPath
