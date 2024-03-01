@@ -1,3 +1,19 @@
+# 2.3.3
+
+Fix running projects with a space in the folder name
+
+# 2.3.2
+
+Build
+
+# 2.3.1
+
+Add documentation comments to `handleError()`
+
+# 2.3.0
+
+Add handleError function
+
 # 2.2.2
 
 Allow wildcard `**` at the end of events
