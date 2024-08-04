@@ -1,3 +1,7 @@
+# 3.1.0
+
+Update to latest cli version
+
 # 3.0.1
 
 Update run.js to detect where node is installed
