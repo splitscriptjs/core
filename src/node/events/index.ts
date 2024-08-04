@@ -1,11 +1,12 @@
 // Dependencies
-import fs from 'fs'
-import fsp from 'fs/promises'
-import { glob } from 'glob'
-import path from 'path'
-import { pathToFileURL } from 'url'
+import fs from 'node:fs'
+import fsp from 'node:fs/promises'
+import path from 'node:path'
+import { pathToFileURL } from 'node:url'
 
+import { glob } from 'glob'
 import ansiColors from 'ansi-colors'
+
 import { root } from '../index.js'
 
 /** **Internal** - Used to check for duplicate event listeners */
@@ -148,35 +149,32 @@ export class EventEmitter<Events extends readonly string[]> {
 			throw new Error(`Cannot have duplicate Event Emitters (${uniqueName})`)
 		this.uniqueName = uniqueName
 		registered.push(uniqueName)
+		let fname = path.join(process.env.CONFIG_LOCATION ?? root(), ".ss.json")
+		let exists = fs.existsSync(fname)
+		if (!exists) {
+			fs.writeFileSync(fname, "{}")
+		}
+
 		fsp
 			.readFile(
-				path.join(process.env.CONFIG_LOCATION ?? root(), 'ss.json'),
+				fname,
 				'utf-8'
 			)
 			.then((value) => {
 				let current = JSON.parse(value)
-				current.packages[uniqueName] = {
+				current[uniqueName] = {
 					validEvents,
 					packageName
 				}
 				fsp.writeFile(
-					path.join(process.env.CONFIG_LOCATION ?? root(), 'ss.json'),
+					fname,
 					JSON.stringify(current, null, '\t')
 				)
+			}, (err) => {
+				throw "Failed to write to json " + err
 			})
 			.catch((err) => {
-				let current = {
-					packages: {
-						[uniqueName]: {
-							validEvents,
-							packageName
-						}
-					}
-				}
-				fsp.writeFile(
-					path.join(process.env.CONFIG_LOCATION ?? root(), 'ss.json'),
-					JSON.stringify(current, null, '\t')
-				)
+				throw "Failed to write to json " + err
 			})
 		this.validEvents = Array.from(validEvents)
 	}

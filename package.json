@@ -1,6 +1,6 @@
 {
 	"name": "@splitscript.js/core",
-	"version": "2.3.5",
+	"version": "2.3.6",
 	"description": "Core SplitScript.js library",
 	"types": "./dist/types/index.d.ts",
 	"exports": {
@@ -12,7 +12,7 @@
 		}
 	},
 	"bin": {
-		"splitscript": "./dist/cli/index.js"
+		"splitscript": "./dist/cli/run.js"
 	},
 	"files": [
 		"dist",
@@ -21,7 +21,11 @@
 	],
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"build": "rm -fr dist/* && tsc && esbuild `find src/node -type f -name \"*.ts\"` --platform='node' --ignore-annotations --format='cjs' --outdir='dist/node/cjs' && esbuild `find src/node -type f -name \"*.ts\"` --platform='node' --ignore-annotations --format='esm' --outdir='dist/node/esm' && cp src/esmpackage.json dist/node/esm/package.json && esbuild `find src/cli -type f -name \"*.ts\"` --format='cjs' --outdir='dist/cli' && cp src/cli/package.json dist/cli/package.json"
+		"build": "rm -fr dist/* && tsc && npm run build:cjs && npm run build:esm && npm run build:cpyesm && npm run build:cli",
+		"build:cjs": "esbuild `find src/node -type f -name \"*.ts\"` --platform='node' --ignore-annotations --format='cjs' --outdir='dist/node/cjs'",
+		"build:esm": "esbuild `find src/node -type f -name \"*.ts\"` --platform='node' --ignore-annotations --format='esm' --outdir='dist/node/esm'",
+		"build:cpyesm": "cp src/esmpackage.json dist/node/esm/package.json",
+		"build:cli": "bash buildbinary.sh && cp src/cli/run.js dist/cli/run.js"
 	},
 	"repository": {
 		"type": "git",
@@ -34,7 +38,8 @@
 	},
 	"homepage": "https://splitscript.js.org",
 	"devDependencies": {
-		"@types/node": "^18.16.5"
+		"@types/node": "^20.11.25",
+		"typescript": "^5.4.5"
 	},
 	"dependencies": {
 		"actual.require.main.filename": "^1.0.0",

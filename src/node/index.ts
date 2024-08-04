@@ -1,4 +1,5 @@
-import path from 'path'
+import path from 'node:path'
+
 //@ts-ignore require.main.filename support in both ESM and CJS
 import filename from 'actual.require.main.filename'
 

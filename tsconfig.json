@@ -2,7 +2,7 @@
 	"compilerOptions": {
 		"strict": true,
 		"baseUrl": ".",
-		"module": "CommonJS",
+		"module": "NodeNext",
 		"lib": ["ESNext"],
 		"pretty": true,
 		"resolveJsonModule": true,
