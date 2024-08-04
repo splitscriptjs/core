@@ -1,3 +1,7 @@
+# 3.0.0
+
+Switch to a Golang Cli
+
 # 2.3.5
 
 Add more documentation comments
