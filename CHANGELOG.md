@@ -1,3 +1,7 @@
+# 3.0.1
+
+Update run.js to detect where node is installed
+
 # 3.0.0
 
 Switch to a Golang Cli

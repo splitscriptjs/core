@@ -1,6 +1,6 @@
 {
 	"name": "@splitscript/core",
-	"version": "3.0.0",
+	"version": "3.0.1",
 	"description": "Core SplitScript.js library",
 	"exports": "./src/node/index.ts",
 	"bin": {
