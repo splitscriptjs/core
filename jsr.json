@@ -1,16 +1,12 @@
 {
 	"name": "@splitscript/core",
-	"version": "2.3.5",
+	"version": "3.0.0",
 	"description": "Core SplitScript.js library",
 	"exports": "./src/node/index.ts",
 	"bin": {
 		"splitscript": "./dist/cli/index.js"
 	},
-	"files": [
-		"dist",
-		"CHANGELOG.md",
-		"README.md"
-	],
+	"files": ["dist", "CHANGELOG.md", "README.md"],
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"build": "rm -fr dist/* && tsc && esbuild `find src/node -type f -name \"*.ts\"` --platform='node' --ignore-annotations --format='cjs' --outdir='dist/node/cjs' && esbuild `find src/node -type f -name \"*.ts\"` --platform='node' --ignore-annotations --format='esm' --outdir='dist/node/esm' && cp src/esmpackage.json dist/node/esm/package.json && esbuild `find src/cli -type f -name \"*.ts\"` --format='cjs' --outdir='dist/cli' && cp src/cli/package.json dist/cli/package.json"
